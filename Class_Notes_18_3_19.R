@@ -70,9 +70,7 @@ rbind(x, y) # puts elements x, y to rows
 
 
 
-
-
-
-
+#str(file) *******************************
+ 
 
 
