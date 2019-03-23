@@ -105,6 +105,24 @@
 #| Now we'll use the cbind() function to 'combine columns'. Don't worry about storing the result in a new
 #| variable. Just call cbind() with two arguments -- the patients vector and my_matrix.
 
+# !5 == 7
+# TRUE
+
+#| As you may recall, arithmetic has an order of operations and so do logical expressions. All AND operators
+#| are evaluated before OR operators. Let's look at an example of an ambiguous case. Type: 5 > 8 || 6 != 8 &&
+#| 4 > 3.9
+
+#> 5 >8 || 6 != 8 && 4 > 3.9
+#[1] TRUE
+
+#| That's the answer I was looking for.
+
+#  |==========================================================                                          |  58%
+#| Let's walk through the order of operations in the above case. First the left and right operands of the AND
+#| operator are evaluated. 6 is not equal 8, 4 is greater than 3.9, therefore both operands are TRUE so the
+#| resulting expression `TRUE && TRUE` evaluates to TRUE. Then the left operand of the OR operator is
+#| evaluated: 5 is not greater than 8 so the entire expression is reduced to FALSE || TRUE. Since the right
+#| operand of this expression is TRUE the entire expression evaluates to TRUE.
 
 
 
