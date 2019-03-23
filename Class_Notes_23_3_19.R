@@ -124,7 +124,10 @@
 #| evaluated: 5 is not greater than 8 so the entire expression is reduced to FALSE || TRUE. Since the right
 #| operand of this expression is TRUE the entire expression evaluates to TRUE.
 
+######3
 
+
+# Swirl first R course Logic topic done. 8.ci ders galiba
 
 
 
