@@ -80,6 +80,30 @@
 # while using NAs, you don't test logical comparisons. NA is bulasici. when it gets into a logical comparison,
 # the yield is NA no matter what you're comparing it with because R doesn't know what to do
 
+# x[is.na(x)] gives you all the NA values in the x
+
+# y <- x[!is.na(x)] gives you all the non-NA values in x
+
+# y[y>0] gives you values of y greater than 0
+
+# if you don't clean NAs first, they will corrupt your study. NA > 0 evaluates as NA again.
+
+# x[!is.na(x) & x > 0] can be used as well
+
+# R doesn't use zero-based indexing. R uses one-based indexing. 
+
+# NEGATIVE INDEXES
+
+
+#| Luckily, R accepts negative integer indexes. Whereas x[c(2, 10)] gives us ONLY the 2nd and 10th elements of
+#| x, x[c(-2, -10)] gives us all elements of x EXCEPT for the 2nd and 10 elements.  Try x[c(-2, -10)] now to
+#| see this.
+
+
+# ADDIND A COLUMN TO A MATRIX
+
+#| Now we'll use the cbind() function to 'combine columns'. Don't worry about storing the result in a new
+#| variable. Just call cbind() with two arguments -- the patients vector and my_matrix.
 
 
 
