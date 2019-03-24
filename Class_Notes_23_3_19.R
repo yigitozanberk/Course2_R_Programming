@@ -127,7 +127,159 @@
 ######3
 
 
-# Swirl first R course Logic topic done. 8.ci ders galiba
+# Swirl first R course Logic topic done. 8.ci ders 
+
+###### 9 - Functions
+
+
+#| Congratulations on writing your first function. By writing functions, you can gain serious insight into how
+#| R works. As John Chambers, the creator of R once said:
+#  | 
+#  | To understand computations in R, two slogans are helpful: 1. Everything that exists is an object. 2.
+#| Everything that happens is a function call.
+
+#| With all of this talk about arguments, you may be wondering if there is a way you can see a function's
+#| arguments (besides looking at the documentation). Thankfully, you can use the args() function! Type:
+#| args(remainder) to examine the arguments for the remainder function.
+
+
+
+# You can pass functions as arguments to other functions just like you can pass
+# data to functions. Let's say you define the following functions:
+#
+# add_two_numbers <- function(num1, num2){
+#    num1 + num2
+# }
+#
+# multiply_two_numbers <- function(num1, num2){
+#	num1 * num2
+# }
+#
+# some_function <- function(func){
+#    func(2, 4)
+# }
+#
+# As you can see we use the argument name "func" like a function inside of 
+# "some_function()." By passing functions as arguments 
+# some_function(add_two_numbers) will evaluate to 6, while
+# some_function(multiply_two_numbers) will evaluate to 8.
+# 
+# Finish the function definition below so that if a function is passed into the
+# "func" argument and some data (like a vector) is passed into the dat argument
+# the evaluate() function will return the result of dat being passed as an
+# argument to func.
+#
+# Hints: This exercise is a little tricky so I'll provide a few example of how
+# evaluate() should act:
+#    1. evaluate(sum, c(2, 4, 6)) should evaluate to 12
+#    2. evaluate(median, c(7, 40, 9)) should evaluate to 9
+#    3. evaluate(floor, 11.1) should evaluate to 11
+
+evaluate <- function(func, dat){
+  # Write your code here!
+  # Remember: the last expression evaluated will be returned! 
+}
+
+
+#> evaluate(function(x){x+1}, 6)
+#[1] 7
+#
+#| All that hard work is paying off!
+#  
+#  |=================================================================                                   |  65%
+#  | The first argument is a tiny anonymous function that takes one argument `x` and returns `x+1`. We passed
+#  | the number 6 into this function so the entire expression evaluates to 7.
+
+
+
+
+# Let's explore how to "unpack" arguments from an ellipses when you use the
+# ellipses as an argument in a function. Below I have an example function that
+# is supposed to add two explicitly named arguments called alpha and beta.
+# 
+# add_alpha_and_beta <- function(...){
+#   # First we must capture the ellipsis inside of a list
+#   # and then assign the list to a variable. Let's name this
+#   # variable `args`.
+#
+#   args <- list(...)
+#
+#   # We're now going to assume that there are two named arguments within args
+#   # with the names `alpha` and `beta.` We can extract named arguments from
+#   # the args list by using the name of the argument and double brackets. The
+#   # `args` variable is just a regular list after all!
+#   
+#   alpha <- args[["alpha"]]
+#   beta  <- args[["beta"]]
+#
+#   # Then we return the sum of alpha and beta.
+#
+#   alpha + beta 
+# }
+#
+# Have you ever played Mad Libs before? The function below will construct a
+# sentence from parts of speech that you provide as arguments. We'll write most
+# of the function, but you'll need to unpack the appropriate arguments from the
+# ellipses.
+
+mad_libs <- function(...){
+  # Do your argument unpacking here!
+  
+  args <- list(...)
+  
+  place <- args [["place"]]
+  adjective <- args[["adjective"]]
+  noun <- args [["noun"]]
+  
+  # Don't modify any code below this comment.
+  # Notice the variables you'll need to create in order for the code below to
+  # be functional!
+  paste("News from", place, "today where", adjective, "students took to the streets in protest of the new", noun, "being installed on campus.")
+}
+
+
+
+
+
+
+
+
+
+
+# The syntax for creating new binary operators in R is unlike anything else in
+# R, but it allows you to define a new syntax for your function. I would only
+# recommend making your own binary operator if you plan on using it often!
+#
+# User-defined binary operators have the following syntax:
+#      %[whatever]% 
+# where [whatever] represents any valid variable name.
+# 
+# Let's say I wanted to define a binary operator that multiplied two numbers and
+# then added one to the product. An implementation of that operator is below:
+#
+# "%mult_add_one%" <- function(left, right){ # Notice the quotation marks!
+#   left * right + 1
+# }
+#
+# I could then use this binary operator like `4 %mult_add_one% 5` which would
+# evaluate to 21.
+#
+# Write your own binary operator below from absolute scratch! Your binary
+# operator must be called %p% so that the expression:
+#
+#       "Good" %p% "job!"
+#
+# will evaluate to: "Good job!"
+
+"%p%" <- function(){ # Remember to add arguments!
+  
+}
+
+
+
+
+
+
 
 
 
