@@ -20,7 +20,7 @@
 #| message letting you know you've done so.
 
 #| When you are at the R prompt (>):
- # | -- Typing skip() allows you to skip the current
+# | -- Typing skip() allows you to skip the current
 #| question.
 #| -- Typing play() lets you experiment with R on your
 #| own; swirl will ignore what you do...
@@ -271,12 +271,154 @@ mad_libs <- function(...){
 #
 # will evaluate to: "Good job!"
 
-"%p%" <- function(){ # Remember to add arguments!
-  
+"%p%" <- function(left, right){ # Remember to add arguments!
+  paste(left,right)
 }
 
 
+# 26 /3 /19
 
+# typically, a function is defined in the global environment
+
+# so that the values of free variables are
+# just found in the user's workspace
+
+# however, in R you can have functions defined
+# inside other functions.
+
+
+# HOW TO MAKE A DOUBLE LAYERED FUNCTION
+
+make.power <- function(n) {
+  pow<- function(x){
+    x^n
+  }
+  pow
+}
+
+cube <- make.power(3)
+square <- make.power(2)
+
+# now square() takes the square of the given number
+
+
+y<- 10
+
+f<- function(x){
+  y<- 2
+  y^2 + g(x)
+}
+
+g<-function(x){
+  x*y
+}
+
+f(3) #will give out 34. y value inside f() is 2. 
+#but y value inside g() is 10.
+
+
+#consequences of lexical scoping
+
+# in Rm all objects must be stored in memory.
+
+#all functions must carry a pointer to their respective
+# defining environments, which could be anywhere
+
+
+
+# OPTIMIZATIONS
+
+# few optimization routines
+# optim, nim, optimize
+
+#require you to pass a function whose argument is 
+# a vector of parameters
+
+# NOTE: Optimization functions in R
+# minimize functions, so you need to use the negative
+# log-likelihood.
+
+make.NegLogLik <- function(data, fixed =c(FALSE, FALSE)) {
+  # second argument determines if I want to fix
+  # some parameters
+  params <- fixed
+  function(p){
+    params[!fixed] <- p # the parameter I want to optimize
+    mu <- params[1]
+    sigma <- params[2]
+    a<- -0.5*length(data)*log(2*pi*sigma^2)
+    b<- -0.5*sum((data-mu)^2)/ (sigma^2)
+    -(a + b)
+  } # returns the function as a return value
+}
+#returns log likelihood of a normal distribution
+# mean = mu
+# standard deviation = sigma
+
+#simulate normal random variables
+set.seed(1); normals <- rnorm(100,1,2) #100 variables
+# mean = 1, sd = 2
+nLL <- make.NegLogLik(normals)
+
+ls(environment(nLL))
+
+# nLL knows the data variable, because it was defined
+# with the nLL <- make.NegLogLik(normals) command
+
+# it is in the environment in which the nLL function was created
+
+#> optim(c(mu = 0, sigma = 1), nLL)$par
+#mu    sigma 
+#1.218239 1.787343
+
+# fixing sigma = 2
+
+nLL <- make.NegLogLik(normals, c(FALSE, 2))
+optimize(nLL, c(-1,3))$minimum # here I can call optimize
+# because optimize will minimize the value of a single variable only
+# [1] 1.217775
+
+# fixing mu = 1
+
+nLL<- make.NegLogLik(normals, c(1, FALSE))
+optimize(nLL, c(1e-6, 10))$minimum
+# [1] 1.800596
+
+
+#plotting the likelihood
+
+nLL <- make.NegLogLik(normals, c(1, FALSE))
+x<- seq(1.7, 1.9, len = 100)
+y <- sapply(x, nLL)
+plot(x, exp(-(y -min(y))), type = "l")
+
+nLL <- make.NegLogLik(normals, c(FALSE, 2))
+x<- seq(0.5, 1.5, len=100)
+y <- sapply(x, nLL)
+plot(x, exp(-(y -min(y))), type = "l")
+
+
+#this type of lexical scoping use is very 
+# useful for exploratory work on data.
+
+# you don't have to tell where the data is 
+# to the function everytime you use it.
+
+# you specify the data with one code, and explore
+# with different variables and different plots
+
+
+# CODING STANDARDS
+
+# very important to understand the code. 
+# it's a discipline.
+
+#1. always write your code in a text editor
+# and save as text.
+
+#2. indent your code.
+
+#3.limit the width of your code(80 columns)
 
 
 
