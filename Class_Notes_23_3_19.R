@@ -416,9 +416,18 @@ plot(x, exp(-(y -min(y))), type = "l")
 #1. always write your code in a text editor
 # and save as text.
 
-#2. indent your code.
+#2. indent your code. at least 4, 8 spaces ideal
 
 #3.limit the width of your code(80 columns)
+# except exceptions, more than two nested for loops
+# is not necessary and should be avioded
+
+#4.limit the length of the functions
+# every function should do one basic activity
+# you can then trace your functions.
+# it's MUCH easier to debug. debugging biyatch.
+
+
 
 
 
