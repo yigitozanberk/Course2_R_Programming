@@ -135,5 +135,273 @@ apply(a, c(1,2), mean) #3 is not in the c(1 , 2) so you want to collapse the 3rd
 
 rowMeans(a, dims = 2)
 
+# mapply FUNCTION
+
+# mapply is a multivariate apply of sorts which applies 
+# a function in parallel over a set of arguments
+
+#function (FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, 
+#USE.NAMES = TRUE)  
+
+# FUN is a function to apply
+# ... contains arguments to apply over
+# MoreArgs is a list of other arguments to FUN
+# SIMPLIFY indicates wether the result should be simplified
+
+# lapply, sapply, tapply only applies a function to a single
+# object
+
+# when you have two lists, where an element of the first list
+# goes into an argument of the function, and an element
+# of the second list go into another argument of the function
+# you have to use mapply if you don't want to mess with
+# for loops. 
+
+# mapply can take multiple list arguments and then apply function
+# to the elements of those lists in parallel.
+
+list(rep(1, 4), rep(2, 3), rep(3, 2), rep(4, 1))
+
+# instead we can do
+
+mapply(rep, 1:4, 4:1)
+
+# same thing as above
+
+noise <- function(n, mean, sd){
+  rnorm(n, mean, sd)
+}
+
+noise(5, 1, 2) # works fine
+
+noise(1:5, 1:5, 2) # doesn't work
+
+#I want to have one random normal with mean 1, 
+# 2 random normals with mean 2, 3 random normals with mean 3
+
+mapply(noise, 1:5, 1:5, 2) # works!
+
+# same as
+list(noise(1, 1, 2), noise(2, 2, 2), noise(3, 3, 2), noise(4, 4, 2), noise(5, 5, 2))
+
+
+# tapply FUNCTION
+
+# used to apply a function over subsets of a vector. 
+
+#arguments of tapply
+
+# x is a vector
+# INDEX is a factor or a list of factors
+# FUN is a function to be applied
+# ... contains other arguments to be passed to FUN
+# simplyfy, to simplify the results
+
+# ***
+# INDEX is a vector of same length with x. it indicates 
+# for example which observations are men, and which are women
+# ***
+
+x <- c(rnorm(10), runif(10), rnorm(10, 1))
+
+f <- gl(3, 10) # factor variables with 3 levels
+
+tapply(x, f, mean)
+
+#1          2          3 
+#-0.2615724  0.5459412  1.0702702 
+
+#gives the mean of all subsets indicated with factor vector f
+
+tapply(x, f, mean, simplify = FALSE) # returns a list
+# instead of a vector
+
+
+#$`1`
+#[1] -0.2615724
+#
+#$`2`
+#[1] 0.5459412
+#
+#$`3`
+#[1] 1.07027
+
+
+tapply(x, f, range) # returns min and max, so the output
+# is a list with two elements in each element
+
+#$`1`
+#[1] -1.861768  1.551435
+
+#$`2`
+#[1] 0.03754318 0.94342789
+
+#$`3`
+#[1] -1.138246  3.021489
+
+
+# split ****
+
+#takes a vector of other objects and splits it into groups
+# determined by a factor or list of factors
+
+str(split)
+#function (x, f, drop = FALSE, ...)  
+
+# x is a vector (or list) or data frame
+# f is a factor (or coerced to one) or a list of factors
+#drop indicates wether empty factors levels should be dropped
+
+#tapply is useful because it breaks lists into factors, applies
+# the function, and brings them together again.
+#split is like tapply, but without the statistics
+
+split(x, f)
+#$`1`
+#[1] -1.8617679 -0.3048470  1.5514351  0.1479850  0.6869013
+#[6] -1.3775540  1.2756217 -0.1518388 -0.9552202 -1.6264392
+
+#$`2`
+#[1] 0.39417273 0.94342789 0.42465677 0.16177029 0.84940117
+#[6] 0.03754318 0.73712011 0.80812835 0.79475433 0.30843719
+
+#$`3`
+#[1]  0.5421373  3.0214891  2.3038140  0.4343200  0.2990374
+#[6]  2.2996320 -1.1382459  1.2579739  0.9110056  0.7715383
+
+
+#it's common to use split with lapply function
+
+lapply(split(x, f), mean) # you can also use tapply here as well
+# but just to give you an idea
+
+library(datasets)
+head(airquality)
+
+# calculate the mean of ozone, wind and temperature in each
+# month
+
+# split the dataframe into monthly pieces, then you can calculate
+#columnmeans
+
+s <- split(airquality, airquality$Month)
+lapply(s, function(x) colMeans(x[, c("Ozone", "Solar.R", "Wind")]))
+
+# returns exactly what you want with a three element list
+
+# but there are missing values so some is NA.
+
+# you can use sapply here, because all elements of the list
+# has length 3
+
+sapply(s, function(x) colMeans(x[, c("Ozone", "Solar.R", "Wind")]))
+#still NAs
+sapply(s, function(x) colMeans(x[, c("Ozone", "Solar.R", "Wind")], na.rm = TRUE))
+#there, fixed.
+
+# split is very useful to split arbitrary variables into factors
+
+# SPLITTING ON MORE THAN ONE LEVEL
+
+x <- rnorm(10)
+
+f1 <- gl(2, 5)
+f2 <- gl(5, 2)
+
+interaction(f1, f2) # to combine all leves of f1 with f2
+# because they both have 10 variables 
+
+str(split(x, list(f1, f2)))
+
+# gives a list of 10
+
+# there are some empty levels. you could take this list and
+# apply lapply or sapply over it.
+
+# instead, use drop = TRUE arg
+
+str(split(x, list(f1, f2), drop = TRUE))
+
+# *** DEBUGGIN TOOLS ***
+
+# indications that something's not right
+
+#message : tame notification, diagnostic message, it could be nothing
+# won't stop the function from executing 
+#message function
+
+#warning : indication that something unexpected happened
+#sometimes you may want to ignore warnings. won't stop executing
+#generated by warning function
+
+#error : last stop. fatal problem. stops execution. 
+# error messages are produced. produced by stop function
+
+#condition : a generic concept for indication that something
+# unexpected can occur
+
+log(-1)
+#[1] NaN
+#Warning message:
+#  In log(-1) : NaNs produced
+
+# typical warning. maybe you don't care. you don't want
+# the function's behaviour to stop
+
+printmessage <- function(x) {
+        if(x > 0)
+            print("x is greater than zero")
+        else
+            print("x is less than or equal to zero")
+        invisible(x) #stops or prevents auto printing the 
+        # lastly used element- in this case the numeric vector.
+        # if you call invisible, it will still return the same object,
+        # but will not autoprint to console
+}
+
+printmessage(1) # works fine
+
+printmessage(NA) #error here. NA > 0 is not defined. it can't move out
+# so it has to error out.
+# it was expecting TRUE/FALSE value
+
+
+printmessage2 <- function(x) {
+      if(is.na(x))
+          print("x is a missing value!")
+      else if(x > 0)
+          print("x is greater than zero")
+      else
+          print("x is less than or equal to zero")
+      invisible(x) #stops or prevents auto printing the 
+
+}
+
+
+x<- log(-1)
+
+printmessage2(x)
+
+
+
+#how do you know that something is wrong with your function?
+
+#what was your input? how did you call the function?
+#what were you expecting? output, messages, other results?
+#what did you get?
+#how does what you get differ from what you were expecting?
+#were your expectations correct in the first place?
+#can you reproduce the problem(exactly)? ********!!!!!!!!!
+
+
+
+
+
+
+
+
+
+
+
 
 
